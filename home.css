@@ -1,0 +1,17 @@
+#Canv{
+    background-color: #FFA781;
+    height: 50%;
+    width: 50%;
+    padding: 0;
+    margin: auto;
+    display: block ;
+   position: absolute;
+   background-repeat: no-repeat;
+   background-position: center;
+   background-size: cover;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
