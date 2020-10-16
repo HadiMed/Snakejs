@@ -11,11 +11,37 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
       <link rel="stylesheet" href="home.css">
     </head>
-    <body style="background-color: #30110D;">
+    <body onresize="fix_pixels()" style="background:#ffc3a0">
+        <div class="Rules">
+            <div class="container">
+           
+            <center><h3><b>Rules</b></h3>  </center> 
+                <ul>
+                    <li> Dont hit the walls !</li>
+                    <li> Dont cross yourself !</li>
+
+                </ul>
+                <p> It s going to be speedy i challenger you break my Highscore :3 </p>
+             
+         
+                <p> Keep pressing the key on the same Direction to get Nitro !</p>
+
+            </div></div>
         <canvas id="Canv">
 
         </canvas>
-        <div 
+        <div class="Div">
+            <div class="container">
+           
+            <center><h3><b>Score:</b></h3>
+             <h4 id="score"> </h4>
+            <center><h3><b>Level:</b></h3>
+             <h4 id="Level"> </h4>
+             <br/> <button id="pause" value="pause" type="button" class="btn btn-outline-dark" onclick="pause()">Pause</button>
+             </button>
+        </center> 
+
+            </div></div>
 
         <script src="main.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

@@ -5,10 +5,14 @@ var ctx = canv.getContext('2d');
 
 let dpi = window.devicePixelRatio;
 
+var score=document.getElementById("score") ; 
+
+var Level=document.getElementById("Level") ; 
+
 canv.setAttribute('width', getComputedStyle(canv).getPropertyValue("width").slice(0, -2) * dpi);
 canv.setAttribute('height', getComputedStyle(canv).getPropertyValue("height").slice(0, -2) * dpi);
 
-var speed = 11;
+var speed = 10;
 
 var Snake = [{ x: 50, y: 40 }, { x: 70, y: 40 }, { x: 90, y: 40 }];
 
@@ -22,6 +26,19 @@ var SpeedofGame = 100;
 var state = "right";
 
 var refreshId ;
+
+function fix_pixels(){
+    clearInterval(refreshId) ; 
+    let dpi = window.devicePixelRatio;
+    canv = document.getElementById("Canv");
+
+    ctx = canv.getContext('2d');
+
+    canv.setAttribute('width', getComputedStyle(canv).getPropertyValue("width").slice(0, -2) * dpi);
+    canv.setAttribute('height', getComputedStyle(canv).getPropertyValue("height").slice(0, -2) * dpi);
+    refreshId=setInterval(gameLoop,SpeedofGame) ; 
+
+}
 
 function move(direction) {
 
@@ -41,7 +58,7 @@ function move(direction) {
     
     ctx.beginPath();
       ctx.arc(food.x, food.y, 6, 0, 2 * Math.PI, false);
-      ctx.fillStyle = 'green';
+      ctx.fillStyle = 'black';
       ctx.fill();
 
     if (oldfood.x == food.x) Snake.pop();
@@ -78,13 +95,15 @@ document.addEventListener('keydown', event => {
     }
 });
 
-
+var ifDone=false ;  
 
 function gameLoop() {
     collision();
     move(state);
-    if (Math.abs(food.x - Snake[0].x) < 11 && Math.abs(food.y - Snake[0].y) < 11) Generatefood() ; 
-    if (Snake.length%7==0 && SpeedofGame>=40) {nextLevel() ;  Generatefood();setTimeout(()=>{refreshId=setInterval(gameLoop,SpeedofGame) ;},1200)  ; }  
+    if (Math.abs(food.x - Snake[0].x) < 11 && Math.abs(food.y - Snake[0].y) < 11) {Generatefood() ;ifDone=false ; } 
+    
+    if (Snake.length%7==0 && SpeedofGame>=40 && !ifDone) {nextLevel() ; Level.innerHTML=level ; ifDone=true ; 
+          setTimeout(()=>{refreshId=setInterval(gameLoop,SpeedofGame) ;},800);}  
     
 
   
@@ -100,9 +119,7 @@ function nextLevel() {
         },background: '#FFA781',
         showConfirmButton: false , 
         
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp'
-        } , timer:600
+         timer:400
     
     }) ; 
     SpeedofGame=SpeedofGame-10 ; 
@@ -110,22 +127,23 @@ function nextLevel() {
     }
 
 function Generatefood(){
-
-    
+         
         oldfood.x = food.x; oldfood.y = food.y;
-        food.x = Math.floor(Math.random() * canv.width-5);
-        food.y = Math.floor(Math.random() * canv.height-5);
+        food.x = Math.floor(Math.random() * (canv.width-5));
+        food.y = Math.floor(Math.random() * (canv.height-5));
         move(state);
         oldfood.x = food.x; oldfood.y = food.y;
+        score.innerHTML=Snake.length ;
 
     
 } ; 
 function collision() {
     /* check collision within the snake itself or with the borders .*/ 
-    if(Snake[0].x>canv.width || Snake[0].x<-5 || Snake[0].y<-5 || Snake[0].y>canv.height){
+    if(Snake[0].x>canv.width-10 || Snake[0].x<-5 || Snake[0].y<-5 || Snake[0].y>canv.height-10){
         clearInterval(refreshId);
         Swal.fire({
             title: 'Oops ! Game Over  ',
+            text: 'Your Score is: '+Snake.length, 
             showClass: {
               popup: 'animate__animated animate__fadeInDown'
             },background: '#FFA781',
@@ -146,6 +164,7 @@ function collision() {
             
             Swal.fire({
                 title: 'Oops ! Game Over  ',
+                text: 'Your Score is: '+Snake.length, 
                 showClass: {
                   popup: 'animate__animated animate__fadeInDown'
                 },background: '#FFA781',
@@ -169,10 +188,27 @@ function reset() {
     state="right" ; 
     level = 1 ; 
     SpeedofGame=100 ; 
+    
     refreshId = setInterval(gameLoop, SpeedofGame); 
+    
+    Level.innerHTML=1 ; 
+    score.innerHTML=3 ; 
 }
 
+function pause() {
+    Whattodo=document.getElementById('pause') ; 
+    if(Whattodo.value=='pause'){
+        clearInterval(refreshId) ; 
+        Whattodo.innerHTML="Continue" ; 
+        Whattodo.value="continue"; 
 
+    } else {
+        Whattodo.innerHTML="pause" ;
+        Whattodo.value="pause" ; 
+        refreshId=setInterval(gameLoop,SpeedofGame) ;  
+
+    } ; 
+}
 
 Swal.fire({
     title: 'Level '+level,
@@ -186,5 +222,8 @@ Swal.fire({
     } , timer:800
 
 }) ;
+
+Level.innerHTML=1 ; 
+score.innerHTML=3 ; 
 setTimeout(()=>{refreshId = setInterval(gameLoop, SpeedofGame);},1200) ; 
 
